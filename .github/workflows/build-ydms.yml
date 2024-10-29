@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: opus-linux
-          path: ${{ steps.buildoutput.outputs.build-output-dir }}
+          path: ${{ steps.buildoutput.outputs.build-output-dir }}/**/*.so
 
   Build-Windows:
     name: Builds Opus for Windows
