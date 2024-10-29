@@ -64,4 +64,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: opus-windows
-          path: ${{ steps.buildoutput.outputs.build-output-dir }}/*.dll
+          path: ${{ steps.buildoutput.outputs.build-output-dir }}
