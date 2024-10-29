@@ -13,9 +13,11 @@ jobs:
         run: ./autogen.sh
 
       - name: Generate build files
-        run: |
-          mkdir build
-          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+        run: mkdir build
+
+      - name: Create build out variable
+        id: buildoutput
+        run: echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
       - name: Configure CMake
         working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
