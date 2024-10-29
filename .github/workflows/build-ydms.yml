@@ -21,7 +21,7 @@ jobs:
 
       - name: Configure CMake
         working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
-        run: cmake ..
+        run: cmake .. -DBUILD_SHARED_LIBS=ON
 
       - name: Build Opus for Linux
         working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: opus-linux
-          path: ${{ steps.buildoutput.outputs.build-output-dir }}/*.a
+          path: ${{ steps.buildoutput.outputs.build-output-dir }}
 
   Build-Windows:
     name: Builds Opus for Windows
@@ -51,7 +51,7 @@ jobs:
 
       - name: Configure CMake
         working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
-        run: cmake ..
+        run: cmake .. -DBUILD_SHARED_LIBS=ON
 
       - name: Build Opus for Windows
         working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
@@ -61,4 +61,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: opus-windows
-          path: ${{ steps.buildoutput.outputs.build-output-dir }}
+          path: ${{ steps.buildoutput.outputs.build-output-dir }}/**/*.dll
