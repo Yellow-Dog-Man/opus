@@ -1,0 +1,64 @@
+name: YDMS Build
+
+on: [push]
+
+jobs:
+  Build-Linux:
+    name: Builds Opus for Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download models
+        run: ./autogen.sh
+
+      - name: Create build directory
+        run: mkdir build
+
+      - name: Create build out variable
+        id: buildoutput
+        run: echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
+        run: cmake .. -DBUILD_SHARED_LIBS=ON
+
+      - name: Build Opus for Linux
+        working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
+        run: cmake --build . --config Release --target package
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: opus-linux
+          path: ${{ steps.buildoutput.outputs.build-output-dir }}/**/*.so
+
+  Build-Windows:
+    name: Builds Opus for Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download models
+        run: ./autogen.bat
+
+      - name: Create build directory
+        run: mkdir build
+
+      - name: Create build out variable
+        id: buildoutput
+        run: echo "build-output-dir=${{ github.workspace }}/build" >> "$Env:GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
+        run: cmake .. -DBUILD_SHARED_LIBS=ON
+
+      - name: Build Opus for Windows
+        working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
+        run: cmake --build . --config Release
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: opus-windows
+          path: ${{ steps.buildoutput.outputs.build-output-dir }}/**/*.dll
