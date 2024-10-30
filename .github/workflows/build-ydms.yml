@@ -1,6 +1,6 @@
 name: YDMS Build
 
-on: [push, workflow_dispatch] # WORKFLOW DISPATCH FOR TESTING
+on: [push]
 
 jobs:
   Build-Linux:
