@@ -56,7 +56,7 @@ jobs:
 
       - name: Configure CMake
         working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
-        environment:
+        env:
           CMAKE_CXX_COMPILER: 'arm-linux-gnueabi-g++'
         run: cmake .. -DBUILD_SHARED_LIBS=ON
 
