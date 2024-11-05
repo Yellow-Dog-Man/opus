@@ -42,8 +42,15 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install "build-essential" "arm-linux-gnueabi-gcc" "arm-linux-gnueabi-g++"
+          sudo apt-get install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
           export CMAKE_CXX_COMPILER=arm-linux-gnueabi-g++
+
+      - name: Create ARM toolchain file
+        run: |
+          echo "set(CMAKE_SYSTEM_NAME Linux)" > ${{ github.workspace }}/arm-toolchain.cmake
+          echo "set(CMAKE_SYSTEM_PROCESSOR aarch64)" >> ${{ github.workspace }}/arm-toolchain.cmake
+          echo "set(CMAKE_C_COMPILER aarch64-linux-gnu-gcc)" >> ${{ github.workspace }}/arm-toolchain.cmake
+          echo "set(CMAKE_CXX_COMPILER aarch64-linux-gnu-g++)" >> ${{ github.workspace }}/arm-toolchain.cmake
 
       - name: Download models
         run: ./autogen.sh
@@ -56,9 +63,7 @@ jobs:
 
       - name: Configure CMake
         working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
-        env:
-          CMAKE_CXX_COMPILER: 'arm-linux-gnueabi-g++'
-        run: cmake .. -DBUILD_SHARED_LIBS=ON
+        run: cmake .. -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/arm-toolchain.cmake -DBUILD_SHARED_LIBS=ON
 
       - name: Build Opus for Linux
         working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
