@@ -42,7 +42,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install build-essential arm-linux-gnueabi-gcc arm-linux-gnueabi-g++
+          sudo apt-get install "build-essential" "arm-linux-gnueabi-gcc" "arm-linux-gnueabi-g++"
           export CMAKE_CXX_COMPILER=arm-linux-gnueabi-g++
 
       - name: Download models
