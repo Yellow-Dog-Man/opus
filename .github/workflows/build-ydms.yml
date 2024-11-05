@@ -52,6 +52,7 @@ jobs:
         run: mkdir build
 
       - name: Create build out variable
+        id: buildoutput
         run: echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
       - name: Configure CMake
