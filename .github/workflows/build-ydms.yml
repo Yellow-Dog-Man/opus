@@ -33,6 +33,43 @@ jobs:
           name: opus-linux
           path: ${{ steps.buildoutput.outputs.build-output-dir }}/**/*.so
 
+  Build-Linux-Arm64:
+    name: Builds Opus for Linux on ARM64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install build-essential arm-linux-gnueabi-gcc arm-linux-gnueabi-g++
+          export CMAKE_CXX_COMPILER=arm-linux-gnueabi-g++
+
+      - name: Download models
+        run: ./autogen.sh
+
+      - name: Create build directory
+        run: mkdir build
+
+      - name: Create build out variable
+        run: echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
+        environment:
+          CMAKE_CXX_COMPILER: 'arm-linux-gnueabi-g++'
+        run: cmake .. -DBUILD_SHARED_LIBS=ON
+
+      - name: Build Opus for Linux
+        working-directory: ${{ steps.buildoutput.outputs.build-output-dir }}
+        run: cmake --build . --config Release --target package
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: opus-linux-arm64
+          path: ${{ steps.buildoutput.outputs.build-output-dir }}/**/*.so
+
   Build-Windows:
     name: Builds Opus for Windows
     runs-on: windows-latest
