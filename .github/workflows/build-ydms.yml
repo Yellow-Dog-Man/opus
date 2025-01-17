@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         osver: [ubuntu-latest, ubuntu-24.04-arm]
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.osver }}
     steps:
       - uses: actions/checkout@v4
 
