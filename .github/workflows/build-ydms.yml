@@ -5,9 +5,20 @@ on: [push]
 jobs:
   Build-Linux:
     name: Builds Opus for Linux
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        osver: [ubuntu-latest, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.osver }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set dist name
+        run: |
+          if ${{ matrix.osver == 'ubuntu-24.04-arm' }}; then
+            echo "distname=opus-linux-arm" >> "$GITHUB_ENV"
+          else
+            echo "distname=opus-linux" >> "$GITHUB_ENV"
+          fi
 
       - name: Download models
         run: ./autogen.sh
@@ -30,7 +41,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: opus-linux
+          name: ${{ env.distname }}
           path: ${{ steps.buildoutput.outputs.build-output-dir }}/**/*.so
 
   Build-Windows:
