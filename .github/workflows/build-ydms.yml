@@ -1,8 +1,8 @@
 name: YDMS Build
 
 on:
-  push
-  workflow_dispatch
+  push:
+  workflow_dispatch:
 
 jobs:
   Build-Linux:
